@@ -11,7 +11,7 @@ public class CriarEventoCaseImpl implements CriarEventoUseCase {
 
     @Override
     public Evento execute(Evento evento){
-        return null;
+        return eventoGateway.criarEvento(evento);
     }
 
 }
