@@ -4,9 +4,13 @@ import dev.java10x.EventClean.core.usecases.BuscarEventoUseCase;
 import dev.java10x.EventClean.core.usecases.CriarEventoUseCase;
 import dev.java10x.EventClean.infraestructure.dtos.EventoDto;
 import dev.java10x.EventClean.infraestructure.mapper.EventoDtoMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,9 +28,12 @@ public class EventoController {
     }
 
     @PostMapping("/criarevento")
-    public EventoDto criarEvento(@RequestBody EventoDto dto){
+    public ResponseEntity<Map<String, Object>> criarEvento(@RequestBody EventoDto dto){
         Evento novoEvento = criarEventoUseCase.execute(eventoDtoMapper.toDomain(dto));
-        return eventoDtoMapper.toDto(novoEvento);
+        Map<String, Object> response = new HashMap<>();
+        response.put("Message:", "Evento cadastrado com sucesso no banco de dados");
+        response.put("Dados do evento", eventoDtoMapper.toDto(novoEvento));
+        return ResponseEntity.ok(response);
 
     }
 
