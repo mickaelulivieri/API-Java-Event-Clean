@@ -2,15 +2,13 @@ package dev.java10x.EventClean.infraestructure.presentation;
 import dev.java10x.EventClean.core.entities.Evento;
 import dev.java10x.EventClean.core.usecases.BuscarEventoUseCase;
 import dev.java10x.EventClean.core.usecases.CriarEventoUseCase;
+import dev.java10x.EventClean.core.usecases.FiltrarIdentificadorEventoUseCase;
 import dev.java10x.EventClean.infraestructure.dtos.EventoDto;
 import dev.java10x.EventClean.infraestructure.mapper.EventoDtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,11 +18,13 @@ public class EventoController {
     private final CriarEventoUseCase criarEventoUseCase;
     private final EventoDtoMapper eventoDtoMapper;
     private final BuscarEventoUseCase buscarEventoUseCase;
+    private final FiltrarIdentificadorEventoUseCase filtrarIdentificaddorUseCase;
 
-    public EventoController(CriarEventoUseCase criarEventoUseCase, EventoDtoMapper eventoDtoMapper, BuscarEventoUseCase buscarEventoUseCase) {
+    public EventoController(CriarEventoUseCase criarEventoUseCase, EventoDtoMapper eventoDtoMapper, BuscarEventoUseCase buscarEventoUseCase, FiltrarIdentificadorEventoUseCase filtrarIdentificaddorUseCase) {
         this.criarEventoUseCase = criarEventoUseCase;
         this.eventoDtoMapper = eventoDtoMapper;
         this.buscarEventoUseCase = buscarEventoUseCase;
+        this.filtrarIdentificaddorUseCase = filtrarIdentificaddorUseCase;
     }
 
     @PostMapping("/criarevento")
@@ -42,4 +42,9 @@ public class EventoController {
         return buscarEventoUseCase.execute().stream().map(eventoDtoMapper::toDto).collect(Collectors.toList());
     }
 
+    @GetMapping("/identificador/{identificador}")
+    public ResponseEntity<Evento> buscarPorIdentificador(@PathVariable String identificador){
+        Evento evento = filtrarIdentificaddorUseCase.execute(identificador);
+        return ResponseEntity.ok(evento);
+    }
 }
