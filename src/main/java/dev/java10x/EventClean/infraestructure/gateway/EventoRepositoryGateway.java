@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class EventoRepositoryGateway implements EventoGateway {
@@ -23,7 +25,12 @@ public class EventoRepositoryGateway implements EventoGateway {
         EventoEntity entity = eventoEntityMapper.toEntity(evento);
         EventoEntity novoEvento = eventRepository.save(entity);
         return eventoEntityMapper.toDomain(novoEvento);
+    }
 
+    @Override
+    public List<Evento> buscarEventos(){
+        return eventRepository.findAll().stream()
+                .map(eventoEntityMapper::toDomain).toList();
     }
 
 }
