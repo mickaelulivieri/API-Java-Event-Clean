@@ -2,6 +2,7 @@ package dev.java10x.EventClean.core.usecases;
 
 import dev.java10x.EventClean.core.entities.Evento;
 import dev.java10x.EventClean.core.gateway.EventoGateway;
+import dev.java10x.EventClean.infraestructure.exception.DuplicateEventException;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 
@@ -14,4 +15,6 @@ public class BuscarEventoUseCaseImpl implements BuscarEventoUseCase {
     public List<Evento> execute() {
         return eventoGateway.buscarEventos();
     }
+
+
 }
